@@ -1,1 +1,83 @@
+:root {
+    --primary: #2c3e50;
+    --secondary: #3498db;
+    --accent: #e74c3c;
+}
 
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.logo {
+    width: 100px;
+    margin-bottom: 1rem;
+}
+
+.brand-title {
+    color: var(--primary);
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.login-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background-color: var(--secondary);
+    border: none;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.login-links {
+    text-align: right;
+    margin-top: 1.5rem;
+}
+
+#forgotPassword {
+    display: block;
+    color: var(--secondary);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+}
+
+.btn-support {
+    display: inline-block;
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.9rem;
+}
