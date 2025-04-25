@@ -10,7 +10,6 @@ const firebaseConfig = {
 
 // Inizializza Firebase
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
 
 // Elementi UI
 const userProfile = document.getElementById('userProfile');
@@ -18,13 +17,7 @@ const userDropdown = document.getElementById('userDropdown');
 const dropdownName = document.getElementById('dropdownName');
 const dropdownEmail = document.getElementById('dropdownEmail');
 const logoutBtn = document.querySelector('.btn-logout');
-const menuBtn = document.getElementById('menuBtn');
-const dropdownMenu = document.getElementById('dropdownMenu');
 const servicesGrid = document.getElementById('servicesGrid');
-const announcementBanner = document.getElementById('announcementBanner');
-const announcementTitle = document.getElementById('announcementTitle');
-const announcementText = document.getElementById('announcementText');
-const closeAnnouncement = document.getElementById('closeAnnouncement');
 
 // Lista amministratori
 const ADMIN_EMAILS = [
@@ -99,35 +92,8 @@ function addServiceCard(title, url) {
   servicesGrid.appendChild(card);
 }
 
-// Carica l'annuncio più recente
-function loadAnnouncement() {
-  db.collection('announcements')
-    .orderBy('date', 'desc')
-    .limit(1)
-    .get()
-    .then(querySnapshot => {
-      if (!querySnapshot.empty) {
-        const announcement = querySnapshot.docs[0].data();
-        announcementTitle.textContent = announcement.title + ': ';
-        announcementText.textContent = announcement.text;
-      } else {
-        announcementBanner.style.display = 'none';
-      }
-    })
-    .catch(error => {
-      console.error("Errore caricamento annunci:", error);
-      announcementBanner.style.display = 'none';
-    });
-}
-
 // Gestione eventi
 function setupEventListeners() {
-  // Menu principale
-  menuBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    dropdownMenu.classList.toggle('show');
-  });
-
   // Profilo utente
   userProfile.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -141,14 +107,8 @@ function setupEventListeners() {
       .catch(error => console.error("Logout error:", error));
   });
 
-  // Chiudi annuncio
-  closeAnnouncement.addEventListener('click', () => {
-    announcementBanner.style.display = 'none';
-  });
-
-  // Chiudi menu cliccando altrove
+  // Chiudi dropdown cliccando altrove
   document.addEventListener('click', () => {
-    dropdownMenu.classList.remove('show');
     userDropdown.classList.remove('show');
   });
 }
@@ -169,17 +129,8 @@ function init() {
     dropdownName.textContent = displayName;
     dropdownEmail.textContent = user.email;
 
-    // Carica contenuti
+    // Carica servizi
     renderServices(user.email);
-    loadAnnouncement();
-
-    // Aggiungi link admin se autorizzato
-    if (ADMIN_EMAILS.includes(user.email)) {
-      const adminLink = document.createElement('a');
-      adminLink.href = 'admin.html';
-      adminLink.textContent = 'Admin';
-      dropdownMenu.appendChild(adminLink);
-    }
   });
 }
 
