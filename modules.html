@@ -13,24 +13,91 @@
             --accent: #e74c3c;
         }
 
-        /* Navbar (stessa di home.html) */
+        /* Stili navbar uguali a home.html */
         .navbar {
             background: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 10px 20px;
             display: flex;
             align-items: center;
+            position: relative;
+        }
+
+        .menu-container {
+            position: relative;
+            margin-right: 15px;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            color: var(--primary);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            min-width: 150px;
+            z-index: 100;
+            left: 0;
+            top: 100%;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f5f5f5;
+        }
+
+        .show {
+            display: block;
         }
 
         .navbar-logo {
             height: 30px;
-            margin-right: auto;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .user-menu {
+            margin-left: auto;
             display: flex;
             align-items: center;
             gap: 15px;
+        }
+
+        #userEmail {
+            font-weight: 500;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .btn-logout {
+            background: none;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-logout:hover {
+            background: var(--accent);
+            color: white;
         }
 
         /* Main Content */
@@ -40,54 +107,114 @@
             padding: 0 20px;
         }
 
-        .module-card {
+        .module-title {
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .module-form {
             background: white;
             border-radius: 10px;
             padding: 25px;
-            margin-bottom: 30px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        .module-title {
-            color: var(--primary);
+        .form-group {
             margin-bottom: 20px;
-            font-size: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
 
         .signature-container {
             border: 1px dashed #ccc;
             border-radius: 8px;
-            margin: 20px 0;
             padding: 15px;
+            margin: 20px 0;
         }
 
         .signature-pad {
             width: 100%;
             height: 200px;
             background: #f9f9f9;
-        }
-
-        .btn-clear-signature {
-            margin-top: 10px;
-            background: #f8f9fa;
             border: 1px solid #ddd;
         }
 
-        /* Annunci */
+        .btn-clear {
+            margin-top: 10px;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        /* Banner Annunci (come in home.html) */
         .announcement-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             background: var(--secondary);
             color: white;
             padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            cursor: pointer;
             text-align: center;
+            z-index: 90;
+        }
+
+        .announcement-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .close-announcement {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
+        <div class="menu-container">
+            <button class="menu-btn" id="menuBtn">☰</button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="home.html">Homepage</a>
+                <a href="modules.html">Moduli</a>
+            </div>
+        </div>
+        
         <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
+        
         <div class="user-menu">
             <span id="userEmail"></span>
             <button class="btn-logout">Logout</button>
@@ -95,60 +222,72 @@
     </nav>
 
     <div class="modules-container">
-        <!-- Banner Annunci -->
-        <div class="announcement-banner" id="announcementBanner">
-            <span id="announcementTitle">Nuovo modulo disponibile!</span>
-        </div>
+        <h1 class="module-title">Modulo di Registrazione Accessi</h1>
+        
+        <form id="accessForm" class="module-form">
+            <div class="form-group">
+                <label class="form-label">ID</label>
+                <input type="text" class="form-control" required>
+            </div>
 
-        <!-- Modulo Esempio -->
-        <div class="module-card">
-            <h2 class="module-title">Modulo di Richiesta</h2>
-            
-            <form id="moduleForm">
-                <div class="mb-3">
-                    <label class="form-label">Nome e Cognome</label>
-                    <input type="text" class="form-control" required>
+            <div class="form-group">
+                <label class="form-label">Nome e cognome</label>
+                <input type="text" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Varco</label>
+                <select class="form-control" required>
+                    <option value="">Seleziona...</option>
+                    <option value="ingresso-principale">Ingresso Principale</option>
+                    <option value="ingresso-secondario">Ingresso Secondario</option>
+                    <option value="carico-scarico">Area Carico/Scarico</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Orario inizio</label>
+                <input type="time" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Orario fine</label>
+                <input type="time" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Tipologia</label>
+                <select class="form-control" required>
+                    <option value="">Seleziona...</option>
+                    <option value="consegna">Consegna Merci</option>
+                    <option value="visita">Visita</option>
+                    <option value="manutenzione">Manutenzione</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Note e accadimenti importanti</label>
+                <textarea class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Firma</label>
+                <div class="signature-container">
+                    <canvas id="signaturePad" class="signature-pad"></canvas>
+                    <button type="button" id="clearSignature" class="btn-clear">Cancella Firma</button>
+                    <input type="hidden" id="signatureData" name="signature">
                 </div>
+            </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Dipartimento</label>
-                    <select class="form-select" required>
-                        <option value="">Seleziona...</option>
-                        <option value="amministrazione">Amministrazione</option>
-                        <option value="tecnico">Tecnico</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Richiesta</label>
-                    <textarea class="form-control" rows="3" required></textarea>
-                </div>
-
-                <!-- Area Firma -->
-                <div class="mb-3">
-                    <label class="form-label">Firma</label>
-                    <div class="signature-container">
-                        <canvas class="signature-pad"></canvas>
-                        <button type="button" class="btn btn-clear-signature">Cancella Firma</button>
-                        <input type="hidden" id="signatureData">
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Invia Modulo</button>
-            </form>
-        </div>
+            <button type="submit" class="btn-submit">Invia Modulo</button>
+        </form>
     </div>
 
-    <!-- Modal Annuncio -->
-    <div class="modal fade" id="announcementModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalAnnouncementTitle"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="modalAnnouncementContent"></div>
-            </div>
+    <!-- Banner Annunci -->
+    <div class="announcement-banner" id="announcementBanner">
+        <div class="announcement-content">
+            <span id="announcementText">Caricamento annunci...</span>
+            <button class="close-announcement" id="closeAnnouncement">✕</button>
         </div>
     </div>
 
@@ -157,7 +296,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
         // Configurazione Firebase
@@ -176,15 +314,36 @@
         // Elementi UI
         const userEmailElement = document.getElementById('userEmail');
         const logoutBtn = document.querySelector('.btn-logout');
+        const menuBtn = document.getElementById('menuBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
         const announcementBanner = document.getElementById('announcementBanner');
-        const announcementModal = new bootstrap.Modal('#announcementModal');
-
+        const announcementText = document.getElementById('announcementText');
+        const closeAnnouncement = document.getElementById('closeAnnouncement');
+        const accessForm = document.getElementById('accessForm');
+        
         // Inizializzazione Signature Pad
-        const canvas = document.querySelector('.signature-pad');
+        const canvas = document.getElementById('signaturePad');
         const signaturePad = new SignaturePad(canvas);
         
-        document.querySelector('.btn-clear-signature').addEventListener('click', () => {
+        document.getElementById('clearSignature').addEventListener('click', () => {
             signaturePad.clear();
+        });
+
+        // Menu a tendina
+        menuBtn.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Chiudi menu cliccando altrove
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.menu-container')) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Chiudi annuncio
+        closeAnnouncement.addEventListener('click', () => {
+            announcementBanner.style.display = 'none';
         });
 
         // Gestione Auth
@@ -193,12 +352,7 @@
                 window.location.href = 'index.html';
             } else {
                 userEmailElement.textContent = user.email;
-                loadAnnouncements();
-                
-                // Solo admin può vedere tutte le risposte
-                if(isAdmin(user.email)) {
-                    addAdminFeatures();
-                }
+                loadAnnouncement();
             }
         });
 
@@ -207,7 +361,7 @@
         });
 
         // Carica Annunci
-        function loadAnnouncements() {
+        function loadAnnouncement() {
             db.collection('announcements')
                 .orderBy('date', 'desc')
                 .limit(1)
@@ -215,13 +369,7 @@
                 .then(querySnapshot => {
                     if(!querySnapshot.empty) {
                         const announcement = querySnapshot.docs[0].data();
-                        document.getElementById('announcementTitle').textContent = announcement.title;
-                        
-                        announcementBanner.addEventListener('click', () => {
-                            document.getElementById('modalAnnouncementTitle').textContent = announcement.title;
-                            document.getElementById('modalAnnouncementContent').innerHTML = announcement.content;
-                            announcementModal.show();
-                        });
+                        announcementText.textContent = announcement.text;
                     } else {
                         announcementBanner.style.display = 'none';
                     }
@@ -229,53 +377,33 @@
         }
 
         // Invia Modulo
-        document.getElementById('moduleForm').addEventListener('submit', (e) => {
+        accessForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
             if(signaturePad.isEmpty()) {
-                alert('Per favore, apponi la firma');
+                alert('Per favore, apponi la tua firma');
                 return;
             }
 
             const formData = {
-                name: document.querySelector('#moduleForm input[type="text"]').value,
-                department: document.querySelector('#moduleForm select').value,
-                request: document.querySelector('#moduleForm textarea').value,
+                id: accessForm.elements[0].value,
+                nome: accessForm.elements[1].value,
+                varco: accessForm.elements[2].value,
+                orarioInizio: accessForm.elements[3].value,
+                orarioFine: accessForm.elements[4].value,
+                tipologia: accessForm.elements[5].value,
+                note: accessForm.elements[6].value,
                 signature: signaturePad.toDataURL(),
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 userEmail: firebase.auth().currentUser.email
             };
 
-            db.collection('formSubmissions').add(formData)
+            db.collection('accessLogs').add(formData)
                 .then(() => {
                     alert('Modulo inviato con successo!');
+                    accessForm.reset();
                     signaturePad.clear();
-                    e.target.reset();
                 })
                 .catch(error => {
-                    alert('Errore: ' + error.message);
-                });
-        });
-
-        // Funzioni Admin
-        function isAdmin(email) {
-            const ADMIN_EMAILS = [
-                "jacopo@ferrioli.eu",
-                "postmaster@ferrioli.eu",
-                "amministrazione.generale@cas.ferrioli.eu"
-            ];
-            return ADMIN_EMAILS.includes(email);
-        }
-
-        function addAdminFeatures() {
-            const adminBtn = document.createElement('button');
-            adminBtn.className = 'btn btn-warning';
-            adminBtn.textContent = 'Visualizza Risposte';
-            adminBtn.style.marginLeft = '10px';
-            adminBtn.onclick = () => window.location.href = 'admin-responses.html';
-            
-            document.querySelector('.user-menu').appendChild(adminBtn);
-        }
-    </script>
-</body>
-</html>
+                    alert('Errore durante l\'invio: ' + error.message);
+               
