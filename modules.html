@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moduli - FERRIOLI.EU</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature-pad.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+        }
+
+        /* Navbar (stessa di home.html) */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-logo {
+            height: 30px;
+            margin-right: auto;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Main Content */
+        .modules-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .module-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .signature-container {
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 15px;
+        }
+
+        .signature-pad {
+            width: 100%;
+            height: 200px;
+            background: #f9f9f9;
+        }
+
+        .btn-clear-signature {
+            margin-top: 10px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+
+        /* Annunci */
+        .announcement-banner {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
+        <div class="user-menu">
+            <span id="userEmail"></span>
+            <button class="btn-logout">Logout</button>
+        </div>
+    </nav>
+
+    <div class="modules-container">
+        <!-- Banner Annunci -->
+        <div class="announcement-banner" id="announcementBanner">
+            <span id="announcementTitle">Nuovo modulo disponibile!</span>
+        </div>
+
+        <!-- Modulo Esempio -->
+        <div class="module-card">
+            <h2 class="module-title">Modulo di Richiesta</h2>
+            
+            <form id="moduleForm">
+                <div class="mb-3">
+                    <label class="form-label">Nome e Cognome</label>
+                    <input type="text" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Dipartimento</label>
+                    <select class="form-select" required>
+                        <option value="">Seleziona...</option>
+                        <option value="amministrazione">Amministrazione</option>
+                        <option value="tecnico">Tecnico</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Richiesta</label>
+                    <textarea class="form-control" rows="3" required></textarea>
+                </div>
+
+                <!-- Area Firma -->
+                <div class="mb-3">
+                    <label class="form-label">Firma</label>
+                    <div class="signature-container">
+                        <canvas class="signature-pad"></canvas>
+                        <button type="button" class="btn btn-clear-signature">Cancella Firma</button>
+                        <input type="hidden" id="signatureData">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Invia Modulo</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Annuncio -->
+    <div class="modal fade" id="announcementModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAnnouncementTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modalAnnouncementContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Configurazione Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDitA_4JDkUTJvX7zrfsLgSCDhhWLgP9Cs",
+            authDomain: "ferriolieu.firebaseapp.com",
+            projectId: "ferriolieu",
+            storageBucket: "ferriolieu.appspot.com",
+            messagingSenderId: "373796791074",
+            appId: "1:373796791074:web:7ed13883e89fcff932fb7b"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Elementi UI
+        const userEmailElement = document.getElementById('userEmail');
+        const logoutBtn = document.querySelector('.btn-logout');
+        const announcementBanner = document.getElementById('announcementBanner');
+        const announcementModal = new bootstrap.Modal('#announcementModal');
+
+        // Inizializzazione Signature Pad
+        const canvas = document.querySelector('.signature-pad');
+        const signaturePad = new SignaturePad(canvas);
+        
+        document.querySelector('.btn-clear-signature').addEventListener('click', () => {
+            signaturePad.clear();
+        });
+
+        // Gestione Auth
+        firebase.auth().onAuthStateChanged(user => {
+            if(!user) {
+                window.location.href = 'index.html';
+            } else {
+                userEmailElement.textContent = user.email;
+                loadAnnouncements();
+                
+                // Solo admin può vedere tutte le risposte
+                if(isAdmin(user.email)) {
+                    addAdminFeatures();
+                }
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            firebase.auth().signOut();
+        });
+
+        // Carica Annunci
+        function loadAnnouncements() {
+            db.collection('announcements')
+                .orderBy('date', 'desc')
+                .limit(1)
+                .get()
+                .then(querySnapshot => {
+                    if(!querySnapshot.empty) {
+                        const announcement = querySnapshot.docs[0].data();
+                        document.getElementById('announcementTitle').textContent = announcement.title;
+                        
+                        announcementBanner.addEventListener('click', () => {
+                            document.getElementById('modalAnnouncementTitle').textContent = announcement.title;
+                            document.getElementById('modalAnnouncementContent').innerHTML = announcement.content;
+                            announcementModal.show();
+                        });
+                    } else {
+                        announcementBanner.style.display = 'none';
+                    }
+                });
+        }
+
+        // Invia Modulo
+        document.getElementById('moduleForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if(signaturePad.isEmpty()) {
+                alert('Per favore, apponi la firma');
+                return;
+            }
+
+            const formData = {
+                name: document.querySelector('#moduleForm input[type="text"]').value,
+                department: document.querySelector('#moduleForm select').value,
+                request: document.querySelector('#moduleForm textarea').value,
+                signature: signaturePad.toDataURL(),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                userEmail: firebase.auth().currentUser.email
+            };
+
+            db.collection('formSubmissions').add(formData)
+                .then(() => {
+                    alert('Modulo inviato con successo!');
+                    signaturePad.clear();
+                    e.target.reset();
+                })
+                .catch(error => {
+                    alert('Errore: ' + error.message);
+                });
+        });
+
+        // Funzioni Admin
+        function isAdmin(email) {
+            const ADMIN_EMAILS = [
+                "jacopo@ferrioli.eu",
+                "postmaster@ferrioli.eu",
+                "amministrazione.generale@cas.ferrioli.eu"
+            ];
+            return ADMIN_EMAILS.includes(email);
+        }
+
+        function addAdminFeatures() {
+            const adminBtn = document.createElement('button');
+            adminBtn.className = 'btn btn-warning';
+            adminBtn.textContent = 'Visualizza Risposte';
+            adminBtn.style.marginLeft = '10px';
+            adminBtn.onclick = () => window.location.href = 'admin-responses.html';
+            
+            document.querySelector('.user-menu').appendChild(adminBtn);
+        }
+    </script>
+</body>
+</html>
