@@ -1,3 +1,46 @@
+// Funzione per formattare il nome utente
+function formatDisplayName(email) {
+    if (!email) return '';
+    
+    // Casi speciali
+    if (email === 'jacopo@ferrioli.eu') {
+        return 'Jacopo Ferrioli | 05149142';
+    }
+    
+    if (email === 'amministrazione.generale@cas.ferrioli.eu') {
+        return 'Amministrazione Generale';
+    }
+    
+    // Estrai la parte prima della @
+    const usernamePart = email.split('@')[0];
+    
+    // Sostituisci punti e trattini con spazi
+    const formatted = usernamePart.replace(/[.-]/g, ' ')
+                                 .split(' ')
+                                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                 .join(' ');
+    
+    return formatted;
+}
+
+// Gestione dropdown utente
+function setupUserDropdown() {
+    const userProfile = document.getElementById('userProfile');
+    const userDropdown = document.getElementById('userDropdown');
+    
+    userProfile.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle('show');
+    });
+    
+    document.addEventListener('click', () => {
+        userDropdown.classList.remove('show');
+    });
+    
+    document.querySelector('.btn-logout').addEventListener('click', () => {
+        firebase.auth().signOut();
+    });
+}
 // Configurazione Firebase (stessa di auth.js)
 const firebaseConfig = {
     apiKey: "AIzaSyDitA_4JDkUTJvX7zrfsLgSCDhhWLgP9Cs",
@@ -21,14 +64,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const servicesGrid = document.getElementById('servicesGrid');
     const logoutBtn = document.querySelector('.btn-logout');
     
-    firebase.auth().onAuthStateChanged(user => {
-        if(!user) {
-            window.location.href = 'index.html';
-        } else {
-            userEmailElement.textContent = user.email;
-            renderServices(user.email);
-        }
-    });
+    firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        // Formatta e mostra il nome utente
+        const displayName = formatDisplayName(user.email);
+        document.getElementById('userProfile').textContent = displayName;
+        document.getElementById('dropdownName').textContent = displayName;
+        document.getElementById('dropdownEmail').textContent = user.email;
+        
+        // Il resto del tuo codice esistente...
+        userEmailElement.textContent = user.email;
+        loadServices(user.email);
+        
+    } else {
+        window.location.href = 'index.html';
+    }
+});
+
+// Inizializza il dropdown
+setupUserDropdown();
     
     logoutBtn.addEventListener('click', () => {
         firebase.auth().signOut();
