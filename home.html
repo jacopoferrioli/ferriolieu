@@ -119,12 +119,25 @@
 </head>
 <body>
     <nav class="navbar">
-        <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
-        <div class="user-menu">
-            <span id="userEmail"></span>
+    <!-- Mantieni il menu esistente se necessario -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Aggiungi questa parte -->
+    <div class="user-menu ms-auto">
+        <div class="user-profile" id="userProfile">
+            <!-- Qui apparirà il nome formattato -->
+        </div>
+        <div class="user-dropdown" id="userDropdown">
+            <div class="user-details">
+                <span id="dropdownName"></span>
+                <span id="dropdownEmail"></span>
+            </div>
             <button class="btn-logout">Logout</button>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <div class="main-container">
         <h1 class="page-title">HOMEPAGE</h1>
