@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -203,6 +204,30 @@
         }
     </style>
 </head>
+    <script>
+    // Gestione menu a tendina
+    document.getElementById('menuBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        document.getElementById('dropdownMenu').classList.toggle('show');
+    });
+
+    // Chiudi menu cliccando altrove
+    document.addEventListener('click', function() {
+        document.getElementById('dropdownMenu').classList.remove('show');
+    });
+
+    // Logout funzionante
+    document.querySelector('.btn-logout').addEventListener('click', function() {
+        firebase.auth().signOut().then(() => {
+            window.location.href = 'index.html';
+        });
+    });
+
+    // Chiudi banner annunci
+    document.getElementById('closeAnnouncement').addEventListener('click', function() {
+        document.getElementById('announcementBanner').style.display = 'none';
+    });
+</script>
 <body>
     <nav class="navbar">
         <div class="menu-container">
