@@ -16,7 +16,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
             margin: 0;
-            padding-bottom: 60px; /* Spazio per il banner annunci */
         }
 
         /* Navbar */
@@ -26,85 +25,67 @@
             padding: 10px 20px;
             display: flex;
             align-items: center;
-            position: relative;
-        }
-
-        /* Menu a tendina */
-        .menu-container {
-            position: relative;
-            margin-right: 15px;
-        }
-
-        .menu-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 5px 10px;
-            color: var(--primary);
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-radius: 5px;
-            min-width: 150px;
-            z-index: 100;
-            left: 0;
-            top: 100%;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 10px 15px;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f5f5f5;
-        }
-
-        .show {
-            display: block;
+            justify-content: space-between;
         }
 
         .navbar-logo {
             height: 30px;
+        }
+
+        /* User Profile */
+        .user-profile {
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .user-profile:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .user-dropdown {
+            display: none;
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 20px;
+            top: 60px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 15px;
+            width: 200px;
+            z-index: 100;
         }
 
-        .user-menu {
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .user-dropdown.show {
+            display: block;
         }
 
-        #userEmail {
-            font-weight: 500;
+        .user-details {
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        #dropdownName {
+            font-weight: 600;
             color: var(--primary);
-            font-size: 0.9rem;
+        }
+
+        #dropdownEmail {
+            font-size: 0.8rem;
+            color: #666;
         }
 
         .btn-logout {
-            background: none;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 5px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .btn-logout:hover {
+            width: 100%;
+            padding: 8px;
             background: var(--accent);
             color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
         /* Main Content */
@@ -170,63 +151,25 @@
             display: block;
             text-align: center;
         }
-
-        /* Banner Annunci */
-        .announcement-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--secondary);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            z-index: 90;
-        }
-
-        .announcement-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .close-announcement {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
-   <nav class="navbar">
-    <div class="menu-container">
-        <button class="menu-btn" id="menuBtn">☰</button>
-        <div class="dropdown-menu" id="dropdownMenu">
-            <a href="home.html">Homepage</a>
-            <a href="modules.html">Moduli</a>
-        </div>
-    </div>
-    
-    <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
-    
-    <div class="user-menu">
-        <div class="user-profile" id="userProfile">
-            <!-- Nome utente formattato -->
-        </div>
-        <div class="user-dropdown" id="userDropdown">
-            <div class="user-details">
-                <span id="dropdownName"></span>
-                <span id="dropdownEmail"></span>
+    <nav class="navbar">
+        <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
+        
+        <div class="user-menu">
+            <div class="user-profile" id="userProfile">
+                <!-- Nome utente formattato -->
             </div>
-            <button class="btn-logout">Logout</button>
+            <div class="user-dropdown" id="userDropdown">
+                <div class="user-details">
+                    <span id="dropdownName"></span>
+                    <span id="dropdownEmail"></span>
+                </div>
+                <button class="btn-logout">Logout</button>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <div class="main-container">
         <h1 class="page-title">HOMEPAGE</h1>
@@ -237,136 +180,8 @@
         </div>
     </div>
 
-    <!-- Banner Annunci -->
-    <div class="announcement-banner" id="announcementBanner">
-        <div class="announcement-content">
-            <span id="announcementText">Caricamento annunci...</span>
-            <button class="close-announcement" id="closeAnnouncement">✕</button>
-        </div>
-    </div>
-
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    
-    <script>
-        // Configurazione Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDitA_4JDkUTJvX7zrfsLgSCDhhWLgP9Cs",
-            authDomain: "ferriolieu.firebaseapp.com",
-            projectId: "ferriolieu",
-            storageBucket: "ferriolieu.appspot.com",
-            messagingSenderId: "373796791074",
-            appId: "1:373796791074:web:7ed13883e89fcff932fb7b"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // Lista amministratori
-        const ADMIN_EMAILS = [
-            "jacopo@ferrioli.eu",
-            "postmaster@ferrioli.eu",
-            "amministrazione.generale@cas.ferrioli.eu"
-        ];
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const userEmailElement = document.getElementById('userEmail');
-            const servicesGrid = document.getElementById('servicesGrid');
-            const logoutBtn = document.querySelector('.btn-logout');
-            const menuBtn = document.getElementById('menuBtn');
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            const announcementBanner = document.getElementById('announcementBanner');
-            const announcementText = document.getElementById('announcementText');
-            const closeAnnouncement = document.getElementById('closeAnnouncement');
-            
-            // Menu a tendina
-            menuBtn.addEventListener('click', () => {
-                dropdownMenu.classList.toggle('show');
-            });
-
-            // Chiudi menu cliccando altrove
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.menu-container')) {
-                    dropdownMenu.classList.remove('show');
-                }
-            });
-
-            // Chiudi annuncio
-            closeAnnouncement.addEventListener('click', () => {
-                announcementBanner.style.display = 'none';
-            });
-
-            // Gestione autenticazione
-            firebase.auth().onAuthStateChanged(user => {
-                if(!user) {
-                    window.location.href = 'index.html';
-                } else {
-                    userEmailElement.textContent = user.email;
-                    renderServices(user.email);
-                    loadAnnouncement();
-                }
-            });
-            
-            logoutBtn.addEventListener('click', () => {
-                firebase.auth().signOut();
-            });
-            
-            function renderServices(email) {
-                servicesGrid.innerHTML = '';
-                
-                const isAdmin = ADMIN_EMAILS.includes(email);
-                const isFerrioli = email.endsWith('@ferrioli.eu');
-                const isSubdomain = email.endsWith('.ferrioli.eu');
-
-                // WEBMAIL (sempre in prima posizione)
-                if(isFerrioli) {
-                    addServiceCard('Webmail Aruba', 'Accesso alla webmail Aruba', 'https://webmail.aruba.it');
-                } else if(isSubdomain) {
-                    addServiceCard('Webmail Zoho', 'Accesso alla webmail Zoho', 'https://mail.zoho.com');
-                }
-
-                // WEBMAIL EXTRA PER ADMIN
-                if(isAdmin) {
-                    if(isFerrioli) {
-                        addServiceCard('Webmail Zoho (Admin)', 'Accesso admin a Zoho', 'https://mail.zoho.com');
-                    } else if(isSubdomain) {
-                        addServiceCard('Webmail Aruba (Admin)', 'Accesso admin ad Aruba', 'https://webmail.aruba.it');
-                    }
-                }
-
-                // SERVIZI STANDARD
-                addServiceCard('Billetto', 'Accedi a Billetto', 'https://billetto.it');
-                addServiceCard('BaseBear', 'Accedi a BaseBear', 'https://basebear.com');
-                addServiceCard('Notion', 'Accedi a Notion', 'https://notion.so');
-            }
-            
-            function addServiceCard(title, description, link) {
-                const card = document.createElement('div');
-                card.className = 'service-card';
-                card.innerHTML = `
-                    <h3>${title}</h3>
-                    <p>${description}</p>
-                    <a href="${link}" target="_blank" class="btn">Accedi</a>
-                `;
-                servicesGrid.appendChild(card);
-            }
-
-            function loadAnnouncement() {
-                db.collection('announcements')
-                    .orderBy('date', 'desc')
-                    .limit(1)
-                    .get()
-                    .then(querySnapshot => {
-                        if(!querySnapshot.empty) {
-                            const announcement = querySnapshot.docs[0].data();
-                            announcementText.textContent = announcement.text;
-                        } else {
-                            announcementBanner.style.display = 'none';
-                        }
-                    });
-            }
-        });
-    </script>
+    <script src="home.js"></script>
 </body>
 </html>
