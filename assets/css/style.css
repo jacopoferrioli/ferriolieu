@@ -156,3 +156,64 @@ body {
 .service-card .btn {
     width: 100%;
 }
+/* User Profile Styles */
+.user-menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.user-profile {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.2);
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.user-profile:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 15px;
+    width: 200px;
+    z-index: 100;
+}
+
+.user-dropdown.show {
+    display: block;
+}
+
+.user-details {
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+#dropdownName {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+#dropdownEmail {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.btn-logout {
+    width: 100%;
+    padding: 8px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
