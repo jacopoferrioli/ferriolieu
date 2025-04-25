@@ -118,33 +118,13 @@
     </style>
 </head>
 <body>
-   <nav class="navbar">
-    <!-- Logo (spostato a sinistra) -->
-    <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
-
-    <!-- Menu originale (centrale) -->
-    <div class="navbar-collapse" id="navbarMenu">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link active" href="home.html">Homepage</a>
-            </li>
-        </ul>
-    </div>
-
-    <!-- User Menu (destra) -->
-    <div class="user-menu">
-        <div class="user-profile" id="userProfile">
-            <!-- Nome utente formattato -->
-        </div>
-        <div class="user-dropdown" id="userDropdown">
-            <div class="user-details">
-                <span id="dropdownName"></span>
-                <span id="dropdownEmail"></span>
-            </div>
+    <nav class="navbar">
+        <img src="assets/img/logo.png" alt="Logo" class="navbar-logo">
+        <div class="user-menu">
+            <span id="userEmail"></span>
             <button class="btn-logout">Logout</button>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <div class="main-container">
         <h1 class="page-title">HOMEPAGE</h1>
@@ -206,21 +186,21 @@
                 if(isFerrioli) {
                     addServiceCard('Webmail Aruba', 'Accesso alla webmail Aruba', 'https://webmail.aruba.it');
                 } else if(isSubdomain) {
-                    addServiceCard('Webmail Zoho', 'Accesso alla webmail Zoho', 'https://mail.zoho.com');
+                    addServiceCard('Webmail Zoho', 'Accesso alla webmail Zoho', 'https://www.zoho.com/mail/login.html');
                 }
 
                 // WEBMAIL EXTRA PER ADMIN
                 if(isAdmin) {
                     if(isFerrioli) {
-                        addServiceCard('Webmail Zoho (Admin)', 'Accesso admin a Zoho', 'https://mail.zoho.com');
+                        addServiceCard('Webmail Zoho (Admin)', 'Accesso admin a Zoho', 'https://www.zoho.com/mail/login.html');
                     } else if(isSubdomain) {
                         addServiceCard('Webmail Aruba (Admin)', 'Accesso admin ad Aruba', 'https://webmail.aruba.it');
                     }
                 }
 
                 // SERVIZI STANDARD
-                addServiceCard('Billetto', 'Accedi a Billetto', 'https://billetto.it');
-                addServiceCard('BaseBear', 'Accedi a BaseBear', 'https://basebear.com');
+                addServiceCard('Billetto', 'Accedi a Billetto', 'https://billetto.it/organiser/sign_in?return_to=%2Forganiser');
+                addServiceCard('BaseBear', 'Accedi a BaseBear', 'https://basebear.com/login.aspx?a=638116be-1ad6-41d1-9303-73ce88794aa6');
                 addServiceCard('Notion', 'Accedi a Notion', 'https://notion.so');
             }
             
