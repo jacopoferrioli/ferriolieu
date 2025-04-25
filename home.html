@@ -183,5 +183,84 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="home.js"></script>
+<script>
+        // Configurazione Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDitA_4JDkUTJvX7zrfsLgSCDhhWLgP9Cs",
+            authDomain: "ferriolieu.firebaseapp.com",
+            projectId: "ferriolieu",
+            storageBucket: "ferriolieu.appspot.com",
+            messagingSenderId: "373796791074",
+            appId: "1:373796791074:web:7ed13883e89fcff932fb7b"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        // Lista amministratori
+        const ADMIN_EMAILS = [
+            "jacopo@ferrioli.eu",
+            "postmaster@ferrioli.eu",
+            "amministrazione.generale@cas.ferrioli.eu"
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userEmailElement = document.getElementById('userEmail');
+            const servicesGrid = document.getElementById('servicesGrid');
+            const logoutBtn = document.querySelector('.btn-logout');
+            
+            firebase.auth().onAuthStateChanged(user => {
+                if(!user) {
+                    window.location.href = 'index.html';
+                } else {
+                    userEmailElement.textContent = user.email;
+                    renderServices(user.email);
+                }
+            });
+            
+            logoutBtn.addEventListener('click', () => {
+                firebase.auth().signOut();
+            });
+            
+            function renderServices(email) {
+                servicesGrid.innerHTML = '';
+                
+                const isAdmin = ADMIN_EMAILS.includes(email);
+                const isFerrioli = email.endsWith('@ferrioli.eu');
+                const isSubdomain = email.endsWith('.ferrioli.eu');
+
+                // WEBMAIL (sempre in prima posizione)
+                if(isFerrioli) {
+                    addServiceCard('Webmail Aruba', 'Accesso alla webmail Aruba', 'https://webmail.aruba.it');
+                } else if(isSubdomain) {
+                    addServiceCard('Webmail Zoho', 'Accesso alla webmail Zoho', 'https://mail.zoho.com');
+                }
+
+                // WEBMAIL EXTRA PER ADMIN
+                if(isAdmin) {
+                    if(isFerrioli) {
+                        addServiceCard('Webmail Zoho (Admin)', 'Accesso admin a Zoho', 'https://mail.zoho.com');
+                    } else if(isSubdomain) {
+                        addServiceCard('Webmail Aruba (Admin)', 'Accesso admin ad Aruba', 'https://webmail.aruba.it');
+                    }
+                }
+
+                // SERVIZI STANDARD
+                addServiceCard('Billetto', 'Accedi a Billetto', 'https://billetto.it');
+                addServiceCard('BaseBear', 'Accedi a BaseBear', 'https://basebear.com');
+                addServiceCard('Notion', 'Accedi a Notion', 'https://notion.so');
+            }
+            
+            function addServiceCard(title, description, link) {
+                const card = document.createElement('div');
+                card.className = 'service-card';
+                card.innerHTML = `
+                    <h3>${title}</h3>
+                    <p>${description}</p>
+                    <a href="${link}" target="_blank" class="btn btn-primary">Accedi</a>
+                `;
+                servicesGrid.appendChild(card);
+            }
+        });
+    </script>
 </body>
 </html>
