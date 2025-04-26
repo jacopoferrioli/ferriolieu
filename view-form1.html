@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Form Responses</title>
+</head>
+<body>
+  <h2>Form Responses</h2>
+  <ul id="responses"></ul>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { firebaseConfig } from './firebase-config.js';
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+    const responses = document.getElementById('responses');
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user || (user.email !== "jacopo@ferrioli.eu" && user.email !== "postmaster@ferrioli.eu" && user.email !== "amministrazione.generale@cas.ferrioli.eu")) {
+        window.location.href = "unauthorized.html";
+      } else {
+        onValue(ref(db, 'forms/form1'), (snapshot) => {
+          responses.innerHTML = '';
+          snapshot.forEach(child => {
+            const data = child.val();
+            const li = document.createElement('li');
+            li.innerHTML = `Name: ${data.name}, Task: ${data.task}<br><img src="${data.signature}" width="200"><hr>`;
+            responses.appendChild(li);
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
