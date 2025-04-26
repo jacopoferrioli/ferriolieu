@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fill Form</title>
+</head>
+<body>
+  <h2>Fill the Form</h2>
+  <form id="workerForm">
+    <label>Name: <input name="name" required></label><br><br>
+    <label>Task: <input name="task" required></label><br><br>
+    <label>Signature:</label><br>
+    <canvas id="signature" width="300" height="150" style="border:1px solid black;"></canvas><br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+    import { firebaseConfig } from './firebase-config.js';
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const canvas = document.getElementById('signature');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+
+    canvas.addEventListener('mousedown', () => drawing = true);
+    canvas.addEventListener('mouseup', () => drawing = false);
+    canvas.addEventListener('mousemove', (e) => {
+      if (!drawing) return;
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      ctx.stroke();
+    });
+
+    document.getElementById('workerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(e.target).entries());
+      formData.signature = canvas.toDataURL();
+      push(ref(db, 'forms/form1'), formData);
+      alert('Form submitted successfully!');
+    });
+  </script>
+</body>
+</html>
