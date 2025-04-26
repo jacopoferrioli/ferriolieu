@@ -38,54 +38,57 @@
             flex-direction: column;
         }
         .doc-item i {
-            margin-right: 10px;
+            margin-bottom: 5px;
             color: var(--secondary);
             font-size: 24px;
         }
         .doc-title {
             font-weight: bold;
+            font-size: 18px;
         }
         .doc-subtitle {
-            font-size: 0.9rem;
+            font-size: 14px;
             color: #555;
         }
     </style>
-    <!-- Font Awesome for icons -->
-    <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="doc-container">
         <h1 class="text-center mb-4">Documents</h1>
         
-        <div id="document-list"></div>
+        <div id="documents-list">
+            <!-- I documenti verranno caricati qui -->
+        </div>
     </div>
 
-    <script>
-    fetch('assets/documents.json')
-      .then(response => response.json())
-      .then(data => {
-        const list = document.getElementById('document-list');
-        data.forEach(doc => {
-          const div = document.createElement('div');
-          div.className = 'doc-item';
-          div.innerHTML = `
-            <a href="${doc.file}" target="_blank">
-              <i class="fas fa-file-alt"></i>
-              <div>
-                <div class="doc-title">${doc.name}</div>
-                ${doc.subtitle ? `<div class="doc-subtitle">${doc.subtitle}</div>` : ''}
-              </div>
-            </a>
-          `;
-          list.appendChild(div);
-        });
-      })
-      .catch(error => {
-        console.error('Errore nel caricamento dei documenti:', error);
-      });
-    </script>
-
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script per caricare i documenti -->
+    <script>
+        fetch('/assets/documents/documents.json')
+            .then(response => response.json())
+            .then(documents => {
+                const list = document.getElementById('documents-list');
+
+                documents.forEach(doc => {
+                    const item = document.createElement('div');
+                    item.className = 'doc-item';
+                    item.innerHTML = `
+                        <a href="${doc.file}" target="_blank">
+                            <i class="fas fa-file-alt"></i>
+                            <span class="doc-title">${doc.title}</span>
+                            <span class="doc-subtitle">${doc.subtitle}</span>
+                        </a>
+                    `;
+                    list.appendChild(item);
+                });
+            })
+            .catch(error => {
+                console.error('Errore nel caricamento dei documenti:', error);
+            });
+    </script>
 </body>
 </html>
