@@ -96,30 +96,7 @@
         }
     </style>
 </head>
-    <div id="announcements" style="background-color: #e6f7ff; padding: 10px; margin-top: 20px;">
-  <strong>Announcements:</strong>
-  <ul id="announcement-list"></ul>
-</div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
-  import { firebaseConfig } from './firebase-config.js';
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const annRef = ref(db, 'announcements/');
-  const annList = document.getElementById('announcement-list');
-
-  onValue(annRef, (snapshot) => {
-    annList.innerHTML = '';
-    snapshot.forEach((child) => {
-      const li = document.createElement('li');
-      li.textContent = child.val();
-      annList.appendChild(li);
-    });
-  });
-</script>
+    
 <body>
     <img src="assets/img/logo.png" alt="Logo Ferrioli" class="logo-main">
     <h1 class="brand-title">FERRIOLI.EU - PAGINA DI ACCESSO</h1>
